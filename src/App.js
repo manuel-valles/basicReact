@@ -1,13 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-// CLASS METHOD
-// class App extends React.Component{
-//   render(){
-//     return React.createElement('h1', null, 'Hello Hello');
-//   }
+class App extends React.Component{
+  render(){
+    let txt = this.props.txt;
+    return (
+    	<div>
+    		<h1>Hello World!</h1> 
+    		<b>Bold</b>
+    		<p>{txt}</p>
+    	</div>
+    );
+  }
+}
 
-// }
+App.propTypes={
+	txt: PropTypes.string,
+	cat: PropTypes.number.isRequired
+}
 
-// STATELESS FUNCTION
-const App = () => <h1>Hello World again!</h1>
+App.defaultProps={
+	cat: 5
+}
+
 export default App;
