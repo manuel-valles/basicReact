@@ -3,31 +3,42 @@ import React from 'react';
 class App2 extends React.Component{
 	constructor(){
 		super();
-		this.state = {currentEvent: '_ _ _'};
-		this.update = this.update.bind(this);
+		this.state={a: ''}
 	}
 	update(e){
-		this.setState({currentEvent: e.type});
+		this.setState({
+			a: this.a.value,
+			b: this.refs.b.value,
+			c: this.c.refs.input.value
+		})
 	}
 	render(){
-		return (
+		return(
 			<div>
-				<textarea
-					onKeyPress={this.update}
-					onCopy={this.update}
-					onCut={this.update}
-					onPaste={this.update}
-					onFocus={this.update}
-					onBlur={this.update}
-					onDoubleClick={this.update}
-					onTouchStart={this.update}
-					onTouchMove={this.update}
-					onTouchEnd={this.update}
-					cols="30" 
-					rows="10"/>
-				<h1>{this.state.currentEvent}</h1>
+				<input
+				ref={node=> this.a = node}
+				type="text"
+				onChange={this.update.bind(this)}
+				/> {this.state.a}
+				<hr/>
+				<input
+				ref='b' 
+				type="text"
+				onChange={this.update.bind(this)}
+				/> {this.state.b}
+				<hr/>
+				<Input
+				ref={component => this.c = component}
+				update = {this.update.bind(this)}
+				/> {this.state.c}
 			</div>
 		)
+	}
+}
+
+class Input extends React.Component{
+	render(){
+		return <input ref="input" type="text" onChange={this.props.update}/>
 	}
 }
 
