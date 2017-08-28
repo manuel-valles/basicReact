@@ -1,76 +1,62 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 
 class App2 extends React.Component {
-	constructor(){
-		super();
-		this.state={
-			red: 0
-		};
-		this.update = this.update.bind(this);
-	}
-	update(e){
-		this.setState({
-			red: ReactDOM.findDOMNode(this.refs.red.refs.inp).value
-		})
-	}
-	render(){
-		return(
-			<div>	
-				<NumInput 
-					ref="red"
-					min={0}
-					max={255}
-					step={0.01}
-					val={+this.state.red}
-					// type="number"
-					label="Red"
-					update={this.update}/>
-				<br/>
-			</div>
-		);
-	}
+  constructor(){
+    super();
+    this.state = {
+      pages: [
+        { title: 'Home' },
+        { title: 'About' },
+        { title: 'Contact' }
+      ],
+      index: 0
+    }
+  }
+  changePage(index){
+    this.setState({index})
+  }
+  render(){
+    let title = this.state.pages[this.state.index].title;
+    return (
+      <div className="container">
+        <Nav
+          click={this.changePage.bind(this)}
+          items={this.state.pages}
+          active={this.state.index} />
+        <Header title={title} />
+        <Content title={title} />
+      </div>
+    );
+  }
 }
 
-class NumInput extends React.Component{
-	render(){
-		let label = this.props.label !== ''
-			?<label>{this.props.label}-{this.props.val}</label>
-			:'';
-		return (
-			<div>
-				<input ref="inp" 
-					type={this.props.type}
-					min={this.props.min}
-					max={this.props.max}
-					step={this.props.step}
-					defaultValue={this.props.val}
-					onChange={this.props.update}
-				/>
-				{label}
-			</div>
-		);
-	}
-}
-NumInput.propTypes = {
-	min: PropTypes.number,
-	max: PropTypes.number,
-	step: PropTypes.number,
-	val: PropTypes.number,
-	label: PropTypes.string,
-	update: PropTypes.func.isRequired,
-	type: PropTypes.oneOf(['number', 'range'])
+const Header = (props) =>  {
+  return (
+    <header>
+      The {props.title.toUpperCase()} Page
+    </header>
+  );
 }
 
-NumInput.defaultProps = {
-	min: 0,
-	max: 0,
-	step: 1,
-	val: 0,
-	label: '',
-	type: 'range'
+const Nav = (props) => {
+  let items = props.items.map((item, i) => {
+    return <NavItem key={i} {...props} index={i} />
+  })
+  return <ul>{items}</ul>
 }
+
+const NavItem = (props) => {
+  return (
+      <li className={props.active === props.index && 'active'}>
+        <a
+          onClick={props.click.bind(null, props.index)}
+          href="#">
+          {props.items[props.index].title}
+        </a>
+      </li>
+  )
+}
+
+const Content = (props) => <h1>{props.title}</h1>
 
 export default App2;
-
